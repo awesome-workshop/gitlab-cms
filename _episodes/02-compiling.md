@@ -57,14 +57,17 @@ readability of the file, the `CMSSW_RELEASE` is defined as a variable:
 
 ~~~
 cmssw_compile:
+  image: registry.cern.ch/docker.io/cmssw/el7:x86_64
   tags:
     - cvmfs
   variables:
     CMS_PATH: /cvmfs/cms.cern.ch
     CMSSW_RELEASE: CMSSW_10_6_8_patch1
+    SCRAM_ARCH: slc7_amd64_gcc820
   script:
     - shopt -s expand_aliases
     - set +u && source ${CMS_PATH}/cmsset_default.sh; set -u
+    - export SCRAM_ARCH=${SCRAM_ARCH}
     - cmsrel ${CMSSW_RELEASE}
     - cd ${CMSSW_RELEASE}/src
     - cmsenv
@@ -129,6 +132,7 @@ CMSSW and then compiles the code looks as follows:
 ~~~
 cmssw_addpkg:
   stage: compile
+  image: registry.cern.ch/docker.io/cmssw/el7:x86_64
   tags:
     - cvmfs
   variables:
