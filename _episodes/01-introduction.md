@@ -80,6 +80,7 @@ To set up a CMSSW release (here `CMSSW_10_6_8_patch1`), you would usually
 run the following commands:
 
 ~~~
+cmssw-el7
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 cmsrel CMSSW_10_6_8_patch1
 cd CMSSW_10_6_8_patch1/src
@@ -87,7 +88,10 @@ cmsenv
 ~~~
 {: .language-bash}
 
-Maybe the second command will print out a warning such as
+The first command is needed because CMSSW_10_6_8_patch1 is pretty old (we chose an old one on purpose!) and it does not have any build for the recent alma9 lxplus runs. 
+So we need to start a CentOS7 container first, which we do with the `cmssw-el7` command, as described [here](https://cms-sw.github.io/singularity.html).
+
+Maybe the third command will print out a warning such as
 
 ~~~
 WARNING: Developer's area is created for non-production architecture slc7_amd64_gcc820. Production architecture for this release is slc7_amd64_gcc700.
@@ -159,6 +163,7 @@ setup command and enabling these checks afterwards again.
 >
 > ~~~
 > cmssw_setup:
+>    image: registry.cern.ch/docker.io/cmssw/el7:x86_64
 >   tags:
 >     - cvmfs
 >   variables:
@@ -177,6 +182,7 @@ setup command and enabling these checks afterwards again.
 > ~~~
 > {: .language-yaml}
 >
+> The `image` directive tells the gitlab runner that it should run in a CentOS7 container, just like you would manually do in lxplus using `cmssw-el7`.
 > The `set +u` command turns off errors for referencing unset variables. It isn't really needed here, since `-u` (i.e. not allowing to use unset variables) isn't set by default, but the script would fail if one used `set -u` somewhere else, so it's safer to catch this here.
 {: .solution}
 
