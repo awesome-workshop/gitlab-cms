@@ -59,3 +59,4 @@
 [gitlab-variables-advanced]: https://gitlab.cern.ch/help/ci/variables/README#advanced-use
 [workshop-indico]: https://indico.cern.ch/event/854880/
 [gitlab-newproject]: https://gitlab.cern.ch/projects/new
+[hsf-training-gitlab-ci]: https://hsf-training.github.io/hsf-training-cicd/
