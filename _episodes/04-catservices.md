@@ -69,7 +69,7 @@ Try copying the file: `/eos/cms/store/group/cat/datasets/MINIAODSIM/RunIISummer2
 {: .challenge}
 
 > ## Solution
-> A possible solution to the challenge above is the following:
+> A possible solution to the exercise above is the following:
 > ~~~
 test_eos_service:
   image:
@@ -93,5 +93,63 @@ test_eos_service:
 {: .solution}
 
 ## Using the CAT VOMS proxy service
+
+The `cmscat` service account is also a member of the CMS VO, so it can request a VOMS proxy.
+If your project is in `cms-analysis` it can requests a VOMS proxy to a service hosted at `cms-cat-grid-proxy-service.app.cern.ch`, in much the same way as the CAT EOS service was requesting a proxy to `cms-cat-ci-datasets.app.cern.ch`.
+The VOMS proxy is provided as a `base64`-encoded string, and it has a lifetime as long the the CI job that requests it.
+
+> ## Exercise: setup a CI job that sets a 
+>
+> There is a few technical aspects that are involved in this.
+> First, your GitLab CI job needs to be configured to that it creates an authentication token.
+> This is achieved with the following lines:
+> ~~~
+> id_tokens:
+>     MY_JOB_JWT:
+>        aud: "cms-cat-grid-proxy-service.app.cern.ch"
+> ~~~
+> Second, you need to query a service, hosted at `https://cms-cat-grid-proxy-service.app.cern.ch`, to give you a short lived VOMS proxy, on behalf of the `cmscat` service account.
+This is achieved with the following lines:
+> ~~~
+> proxy=$(curl --fail-with-body -H "Authorization: ${MY_JOB_JWT}" "https://cms-cat-grid-proxy-service.app.cern.ch/api" | tr -d \")
+> ~~~
+> Finally, you need to decode the proxy and store it as a file and set the `X509_USER_PROXY` environment variable, with something like:
+> ~~~
+>- printf $proxy | base64 -d > myproxy
+>- export X509_USER_PROXY=$(pwd)/myproxy
+> ~~~
+> > ### Warning
+> > The image you use needs to have CVMFS mounted.
+> > Depending on how the environment of the image you use is set, you may also need to export a few other environment variables, in particular:
+> > ~~~
+> > - export X509_VOMS_DIR=/cvmfs/grid.cern.ch/etc/grid-security/vomsdir/
+> > - export VOMS_USERCONF=/cvmfs/grid.cern.ch/etc/grid-security/vomses/
+> > - export X509_CERT_DIR=/cvmfs/grid.cern.ch/etc/grid-security/certificates/
+> > ~~~
+> {: .callout}
+{: .challenge}
+
+> ## Solution
+> A possible solution to the exercise above is the following:
+> ~~~
+test_proxy_service:
+  image:
+    name: registry.cern.ch/docker.io/cmssw/el7:x86_64
+  tags:
+    - cvmfs
+  id_tokens:
+    MY_JOB_JWT: # or any other variable name
+        aud: "cms-cat-grid-proxy-service.app.cern.ch"
+  before_script:
+    - 'proxy=$(curl -H "Authorization: ${MY_JOB_JWT}" "https://cms-cat-grid-proxy-service.app.cern.ch/api" | tr -d \")' 
+  script:
+    - printf $proxy | base64 -d > myproxy
+    - export X509_USER_PROXY=$(pwd)/myproxy
+    - export X509_CERT_DIR=/cvmfs/grid.cern.ch/etc/grid-security/certificates/
+    - voms-proxy-info # to test it
+> ~~~
+> {: language-yaml}
+{: .solution}
+
 
 {% include links.md %}
