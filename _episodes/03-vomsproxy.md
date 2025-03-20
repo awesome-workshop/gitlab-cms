@@ -221,10 +221,13 @@ An example to obtain a grid proxy, check it, and then destroy it again
 would result in the following `yaml`:
 
 ~~~
-voms_proxy:
+voms_proxy_test:
+  stage: test
   image:
-    name: gitlab-registry.cern.ch/clange/cmssw-docker/cc7-cms:latest
+    name: gitlab-registry.cern.ch/cms-cloud/cmssw-docker/cc7-cms:latest
     entrypoint: [""]
+  tags:
+    - cvmfs
   script:
     - mkdir -p ${HOME}/.globus
     - printf "${GRID_USERCERT}" | base64 -d > ${HOME}/.globus/usercert.pem
@@ -233,6 +236,7 @@ voms_proxy:
     - printf "${GRID_PASSWORD}" | base64 -d | voms-proxy-init --voms cms --pwstdin
     - voms-proxy-info --all
     - voms-proxy-destroy
+
 ~~~
 {: .language-yaml}
 

@@ -1,5 +1,5 @@
 ---
-title: "Setting up a CMSSW environment"
+title: "Setting up an environment using CVMFS in GitLab CI (e.g. to run CMSSW)"
 teaching: 10
 exercises: 10
 questions:
@@ -9,7 +9,7 @@ objectives:
 - "Know how to source the CMSSW environment"
 - "Understand the different commands that need to be used"
 keypoints:
-- "GitLab CVMFS runners are required to use CMSSW."
+- "Special GitLab CVMFS runners are required to run CI jobs that need CVMFS, e.g. to run CMSSW."
 - "The setup script sets aliases, which are not expanded by default."
 - "If the setup script tries to access unset variables, then that can cause the CI to fail when using strict shell scripting checks."
 ---
@@ -40,8 +40,7 @@ git clone ssh://git@gitlab.cern.ch:7999/${USER}/awesome-gitlab-cms.git
 
 ## Choosing the correct GitLab runner
 
-Standard GitLab runners at CERN do not mount CVMFS, which is required for
-setting up CMSSW. In order to get a runner that mounts CVMFS, all you need
+Standard GitLab runners at CERN do not mount CVMFS, which is required in many cases, for example for setting up CMSSW, or to create a grid proxy, or to access LCG software stacks in `/cvmfs/sft.cern.ch/`. In order to get a runner that mounts CVMFS, all you need
 to do is add a `tag` to your `gitlab-ci.yml` file:
 
 ~~~
@@ -67,6 +66,10 @@ GitLab UI one can see the output, and also the `cvmfs` label:
 
 ![A job with a GitLab CVMFS Runner showing the cvmfs label](../fig/cvmfs_tag.png)
 
+In the following you'll will learn how to setup a GitLab CI job that runs CMSSW.
+
+This should be regarded as an example for any CI job requiring access to CVMFS and accessing CMS-restricted files.
+
 ## Setting up CMSSW
 
 > ## CMS-specific setup
@@ -80,6 +83,7 @@ To set up a CMSSW release (here `CMSSW_10_6_8_patch1`), you would usually
 run the following commands:
 
 ~~~
+cmssw-el7
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 cmsrel CMSSW_10_6_8_patch1
 cd CMSSW_10_6_8_patch1/src
@@ -87,7 +91,10 @@ cmsenv
 ~~~
 {: .language-bash}
 
-Maybe the second command will print out a warning such as
+The first command is needed because CMSSW_10_6_8_patch1 is pretty old (we chose an old one on purpose!) and it does not have any build for the recent alma9 LXPLUS. 
+So we need to start a CentOS7 container first, which we do with the `cmssw-el7` command, as described [here](https://cms-sw.github.io/singularity.html).
+
+Maybe the third command will print out a warning such as
 
 ~~~
 WARNING: Developer's area is created for non-production architecture slc7_amd64_gcc820. Production architecture for this release is slc7_amd64_gcc700.
@@ -134,7 +141,7 @@ case when running in GitLab.
 
 
 
-In order to make aliases work in the GitLab runners, one needs to explicitely
+In order to make aliases work in the GitLab runners, one needs to explicitly
 enable alias expansion:
 
 ~~~
@@ -143,7 +150,7 @@ shopt -s expand_aliases
 {: .language-bash}
 
 Another common pitfall when setting up CMSSW in GitLab is that the execution
-fails because the setup script doesn't follow best practives for shell
+fails because the setup script doesn't follow best practices for shell
 scripts such as returning non-zero return values even if the setup is OK or
 using unset variables. Even if the script exits without visible error message,
 there could be something wrong. It is therefore often a good idea to
@@ -159,6 +166,7 @@ setup command and enabling these checks afterwards again.
 >
 > ~~~
 > cmssw_setup:
+>    image: registry.cern.ch/docker.io/cmssw/el7:x86_64
 >   tags:
 >     - cvmfs
 >   variables:
@@ -177,11 +185,12 @@ setup command and enabling these checks afterwards again.
 > ~~~
 > {: .language-yaml}
 >
+> The `image` directive tells the gitlab runner that it should run in a CentOS7 container, just like you would manually do on lxplus using `cmssw-el7`.
 > The `set +u` command turns off errors for referencing unset variables. It isn't really needed here, since `-u` (i.e. not allowing to use unset variables) isn't set by default, but the script would fail if one used `set -u` somewhere else, so it's safer to catch this here.
 {: .solution}
 
 The reason why in the example above the variable `${CMS_PATH}` is used and not simply
-`/cvmfs/cms.cern.ch` directly is just to mimick the default environment you would get on
+`/cvmfs/cms.cern.ch` directly is just to mimic the default environment you would get on
 LXPLUS. You can check if this is the case for you as well by running `env | grep CMS_PATH`
 after logging on to LXPLUS.
 
