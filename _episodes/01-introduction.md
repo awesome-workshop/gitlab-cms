@@ -1,5 +1,5 @@
 ---
-title: "Setting up an environment using CVMFS in the GitLab CI (e.g. to run CMSSW)"
+title: "Setting up an environment using CVMFS in GitLab CI (e.g. to run CMSSW)"
 teaching: 10
 exercises: 10
 questions:
@@ -66,7 +66,7 @@ GitLab UI one can see the output, and also the `cvmfs` label:
 
 ![A job with a GitLab CVMFS Runner showing the cvmfs label](../fig/cvmfs_tag.png)
 
-In the following you'll will learn how to setup a GitLab CI job running CMSSW.
+In the following you'll will learn how to setup a GitLab CI job that runs CMSSW.
 
 This should be regarded as an example for any CI job requiring access to CVMFS and accessing CMS-restricted files.
 
@@ -185,7 +185,7 @@ setup command and enabling these checks afterwards again.
 > ~~~
 > {: .language-yaml}
 >
-> The `image` directive tells the gitlab runner that it should run in a CentOS7 container, just like you would manually do in lxplus using `cmssw-el7`.
+> The `image` directive tells the gitlab runner that it should run in a CentOS7 container, just like you would manually do on lxplus using `cmssw-el7`.
 > The `set +u` command turns off errors for referencing unset variables. It isn't really needed here, since `-u` (i.e. not allowing to use unset variables) isn't set by default, but the script would fail if one used `set -u` somewhere else, so it's safer to catch this here.
 {: .solution}
 

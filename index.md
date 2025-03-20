@@ -3,7 +3,7 @@ layout: lesson
 root: .  # Is the only page that doesn't follow the pattern /:path/index.html
 permalink: index.html  # Is the only page that doesn't follow the pattern /:path/index.html
 ---
-In this lesson you will learn how to run jobs that require CMS-specific software stack ad file access in GitLab CI using the installation at CERN.
+In this lesson you will learn how to run jobs that require a CMS-specific software stack and how to access protected files in GitLab CI using the GitLab installation at CERN.
 We will use the use case of running [CMS software (CMSSW)][cmssw] jobs as an example.
 
 <!-- this is an html comment -->
@@ -12,7 +12,7 @@ We will use the use case of running [CMS software (CMSSW)][cmssw] jobs as an exa
 
 > ## Prerequisites
 >
-> Basic understanding of the purpose of GitLab CI and of its use, as described in the in the [HSF tutorial][hsf-training-gitlab-ci].
+> Basic understanding of the purpose of GitLab CI and of its use, as described in the [HSF tutorial][hsf-training-gitlab-ci].
 > Basic understanding of using and developing in [CMSSW][cmssw].
 {: .prereq}
 

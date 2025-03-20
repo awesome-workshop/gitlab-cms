@@ -34,15 +34,16 @@ code yields the expected results.
 
 In most cases, you will run your tests on centrally produced files. In order
 to be able to access those, you will require a grid proxy valid for the CMS
-virtual organisation (VO) as described in the previous section. For files
-located on EOS, please check the section on
+virtual organisation (VO) as described in the previous section.
+For files located on EOS, please check the section on
 [private information/access control][lesson-gitlab-secrets]
 from the
 [Continuous Integration / Continuous Development (CI/CD)][lesson-gitlab]
 on how to get a Kerberos token via `kinit` (we won't be using this here).
 
 For the analysis example provided in this lessons, we'll use a single file
-from the [/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIISummer20UL17MiniAODv2-106X_mc2017_realistic_v9-v2/MINIAODSIM](https://cmsweb.cern.ch/das/request?input=dataset%3D%2FDYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8%2FRunIISummer20UL17MiniAODv2-106X_mc2017_realistic_v9-v2%2FMINIAODSIM&instance=prod/global) data set. A copy of one file of this dataset is permanently stored on EOS in the following path: `/eos/cms/store/group/cat/datasets/MINIAODSIM/RunIISummer20UL17MiniAODv2-106X_mc2017_realistic_v9-v2/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/2C5565D7-ADE5-2C40-A0E5-BDFCCF40640E.root`.
+from the [/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIISummer20UL17MiniAODv2-106X_mc2017_realistic_v9-v2/MINIAODSIM](https://cmsweb.cern.ch/das/request?input=dataset%3D%2FDYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8%2FRunIISummer20UL17MiniAODv2-106X_mc2017_realistic_v9-v2%2FMINIAODSIM&instance=prod/global) data set.
+A copy of one file of this dataset is permanently stored on EOS in the following path: `/eos/cms/store/group/cat/datasets/MINIAODSIM/RunIISummer20UL17MiniAODv2-106X_mc2017_realistic_v9-v2/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/2C5565D7-ADE5-2C40-A0E5-BDFCCF40640E.root`.
 
 ## Executing `cmsRun`
 
@@ -50,7 +51,8 @@ In principle, all we need to do is compile the code as demonstrated in
 [episode 2]({{ page.root }}{% link _episodes/02-compiling.md %}),
 adding the grid proxy as just done in
 [episode 3]({{ page.root }}{% link _episodes/03-vomsproxy.md %}) or, preferably, in [episode 4]({{ page.root }}{% link _episodes/04-catservices.md %})
-and then execute the `cmsRun` command. Mind that do not need the
+and then execute the `cmsRun` command.
+Mind that you do not need the
 `git cms-addpkg PhysicsTools/PatExamples` command here anymore,
 i.e. remove it in the following! Putting this together, the
 additional commands to run would be:
@@ -64,7 +66,8 @@ ls -l myZPeak.root
 
 where the last command just checks that an output file has been created.
 However, imagine that you would like to run test jobs on more than one file
-and to speed things up do this in parallel. This would mean that you would
+and to speed things up do this in parallel.
+This would mean that you would
 have to compile the code *N* times, which is a waste of resources and time.
 Instead, we can pass the compiled code from the compile step to the run step
 as described below.
@@ -89,7 +92,7 @@ needs to be extended as follows:
 
 ~~~
 artifacts:
-  # artifacts:untracked ignores configuration in the repository’s .gitignore file.
+  # artifacts: untracked ignores configuration in the repository’s .gitignore file.
   untracked: true
   expire_in: 20 minutes
   paths:
@@ -136,7 +139,7 @@ script:
   variables:
     CMS_PATH: /cvmfs/cms.cern.ch
     EOS_MGM_URL: "root://eoscms.cern.ch"
-    CMSSW_RELEASE: CMSSW_10_6_8_patch1   
+    CMSSW_RELEASE: CMSSW_10_6_8_patch1
   tags:
     - cvmfs
   script:
@@ -182,7 +185,7 @@ script:
     EOS_MGM_URL: root://eoscms.cern.ch
     CMS_PATH: /cvmfs/cms.cern.ch
     EOS_MGM_URL: "root://eoscms.cern.ch"
-    CMSSW_RELEASE: CMSSW_10_6_8_patch1   
+    CMSSW_RELEASE: CMSSW_10_6_8_patch1
   before_script:
   - 'XrdSecsssENDORSEMENT=$(curl -H "Authorization: ${MY_JOB_JWT}" "https://cms-cat-ci-datasets.app.cern.ch/api?eospath=${EOSPATH}" | tr -d \")'
   script:
@@ -226,7 +229,7 @@ script:
     EOS_MGM_URL: "root://eoscms.cern.ch"
     CMSSW_RELEASE: CMSSW_10_6_8_patch1   
   before_script:
-    - 'proxy=$(curl -H "Authorization: ${MY_JOB_JWT}" "https://cms-cat-grid-proxy-service.app.cern.ch/api" | tr -d \")' 
+    - 'proxy=$(curl -H "Authorization: ${MY_JOB_JWT}" "https://cms-cat-grid-proxy-service.app.cern.ch/api" | tr -d \")'
   script:
     - shopt -s expand_aliases
     - set +u && source ${CMS_PATH}/cmsset_default.sh; set -u
@@ -255,4 +258,3 @@ script:
 {: .testimonial}
 
 {% include links.md %}
-

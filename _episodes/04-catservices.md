@@ -95,12 +95,12 @@ test_eos_service:
 ## Using the CAT VOMS proxy service
 
 The `cmscat` service account is also a member of the CMS VO, so it can request a VOMS proxy.
-If your project is in `cms-analysis` it can requests a VOMS proxy to a service hosted at `cms-cat-grid-proxy-service.app.cern.ch`, in much the same way as the CAT EOS service was requesting a proxy to `cms-cat-ci-datasets.app.cern.ch`.
-The VOMS proxy is provided as a `base64`-encoded string, and it has a lifetime as long the the CI job that requests it.
+If your project is in `cms-analysis` it can request a VOMS proxy from a service hosted at `cms-cat-grid-proxy-service.app.cern.ch`, in much the same way as the CAT EOS service requests a proxy to `cms-cat-ci-datasets.app.cern.ch` above.
+The VOMS proxy is provided as a `base64`-encoded string, and it has a lifetime as long as the CI job that requests it.
 
-> ## Exercise: setup a CI job that sets a 
+> ## Exercise: Set up a CI job that obtains a VOMS proxy
 >
-> There is a few technical aspects that are involved in this.
+> There are a few technical aspects that involved in this.
 > First, your GitLab CI job needs to be configured to that it creates an authentication token.
 > This is achieved with the following lines:
 > ~~~
@@ -108,12 +108,12 @@ The VOMS proxy is provided as a `base64`-encoded string, and it has a lifetime a
 >     MY_JOB_JWT:
 >        aud: "cms-cat-grid-proxy-service.app.cern.ch"
 > ~~~
-> Second, you need to query a service, hosted at `https://cms-cat-grid-proxy-service.app.cern.ch`, to give you a short lived VOMS proxy, on behalf of the `cmscat` service account.
+> Second, you need to query a service, hosted at `https://cms-cat-grid-proxy-service.app.cern.ch`, to give you a short-lived VOMS proxy, on behalf of the `cmscat` service account.
 This is achieved with the following lines:
 > ~~~
 > proxy=$(curl --fail-with-body -H "Authorization: ${MY_JOB_JWT}" "https://cms-cat-grid-proxy-service.app.cern.ch/api" | tr -d \")
 > ~~~
-> Finally, you need to decode the proxy and store it as a file and set the `X509_USER_PROXY` environment variable, with something like:
+> Finally, you need to decode the proxy, store it as a file, and set the `X509_USER_PROXY` environment variable using something like:
 > ~~~
 >- printf $proxy | base64 -d > myproxy
 >- export X509_USER_PROXY=$(pwd)/myproxy
