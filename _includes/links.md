@@ -49,8 +49,8 @@
 [yaml]: http://yaml.org/
 [bootcamp-coc]: https://indico.cern.ch/event/854880/page/18570-code-of-conduct
 [cmssw]: https://cms-sw.github.io/index.html
-[snow-git]: https://cern.service-now.com/service-portal/faq.do?se=git-service
-[gitlab-ci]: https://gitlab.cern.ch/help/ci/README.md
+[snow-git]: https://gitlab.docs.cern.ch/docs/Build%20your%20application/CI-CD/
+[gitlab-ci]: https://docs.gitlab.com/ci/
 [payload-gitlab-cms]: https://gitlab.cern.ch/awesome-workshop/payload-gitlab-cms
 [gitlab-artifacts]: https://docs.gitlab.com/ee/ci/yaml/#artifacts
 [lesson-gitlab-artifacts]: https://awesome-workshop.github.io/continuous-integration-deployment-gitlab/12-skim-milk/index.html
