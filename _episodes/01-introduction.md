@@ -10,7 +10,6 @@ objectives:
 - "Understand the different commands that need to be used"
 keypoints:
 - "Special GitLab CVMFS runners are required to run CI jobs that need CVMFS, e.g. to run CMSSW."
-- "The setup script sets aliases, which are not expanded by default."
 - "If the setup script tries to access unset variables, then that can cause the CI to fail when using strict shell scripting checks."
 ---
 Before getting into details, a few links to useful documentation on GitLab
@@ -95,22 +94,22 @@ This should be regarded as an example for any CI job requiring access to CVMFS a
 > group on LXPLUS). This means that everything needs to be set up manually.
 {: .callout}
 
-To set up a CMSSW release (for example `CMSSW_10_6_8_patch1`), you would usually
+To set up a CMSSW release (for example `CMSSW_10_6_30`), you would usually
 run the following commands on LXPLUS:
 
 ~~~
 cmssw-el7
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-cmsrel CMSSW_10_6_8_patch1
-cd CMSSW_10_6_8_patch1/src
+cmsrel CMSSW_10_6_30
+cd CMSSW_10_6_30/src
 cmsenv
 ~~~
 {: .language-bash}
 
-The first command is needed because CMSSW_10_6_8_patch1 is pretty old (we chose an old one on purpose!) and it does not have any build for the recent alma9 LXPLUS. 
-So we need to start a CentOS7 container first, which we do with the `cmssw-el7` command, as described [here](https://cms-sw.github.io/singularity.html).
+The first command is needed because CMSSW_10_6_30 is pretty old (we chose an old one on purpose!) and it does not have any build for the recent alma9 LXPLUS. 
+So we need to start a CentOS7 container first, which we do with the `cmssw-el7` command, as described in the [CMS singularity guide](https://cms-sw.github.io/singularity.html).
 
-Maybe the third command will print out a warning such as
+Depending on the software version chosen, the third command may print out a warning such as
 
 ~~~
 WARNING: Developer's area is created for non-production architecture slc7_amd64_gcc820. Production architecture for this release is slc7_amd64_gcc700.
@@ -123,12 +122,7 @@ which can be ignored in this case (or could be removed by first executing
 The command `source /cvmfs/cms.cern.ch/cmsset_default.sh` sets several
 environment variables, in particular adding `/cvmfs/cms.cern.ch/common` to
 the `${PATH}`. You can check this by running `echo ${PATH}`. Another effect
-of this command is that several aliases are defined, which means that
-executing the alias command effectively executes the original command.
-
-> ## Printing all set aliases
-> To print all aliases that are set, just run `alias`.
-{: .callout}
+of this command is that a few helper functions are defined, such as `cmsrel` and `cmsenv`.
 
 > ## Exercise: Determining CMSSW-related aliases
 > What are the actual commands behind `cmsenv` and `cmsrel`?
@@ -151,30 +145,17 @@ executing the alias command effectively executes the original command.
 >
 {: .solution}
 
-Knowing that a command is an alias is important, since `bash` does not
-automatically expand aliases when running non-interactively, which is the
-case when running in GitLab.
 
-
-
-In order to make aliases work in the GitLab runners, one needs to explicitly
-enable alias expansion:
-
-~~~
-shopt -s expand_aliases
-~~~
-{: .language-bash}
-
-Another common pitfall when setting up CMSSW in GitLab is that the execution
+A common pitfall when setting up CMSSW in GitLab is that the execution
 fails because the setup script doesn't follow best practices for shell
 scripts such as returning non-zero return values even if the setup is OK or
 using unset variables. Even if the script exits without visible error message,
 there could be something wrong. It is therefore often a good idea to
-circumvent issues like that by disabling strict checks before running the
-setup command and enabling these checks afterwards again.
+circumvent issues like that by disabling strict checks (issuing `set +u`) before running the
+setup command and enabling these checks afterwards again (issuing `set -u`).
 
 > ## Exercise: Set up CMSSW in GitLab
-> Knowing all this, can you write the yaml to set up CMSSW in GitLab starting from the fragment above and check if this is all working by executing `cmsRun --help` at the end?
+> Knowing all this, can you write the `.gitlab-ci.yml` file to set up CMSSW in GitLab starting from the fragment above and check if this is all working by executing `cmsRun --help` at the end?
 {: .challenge}
 
 > ## Solution: Set up CMSSW in GitLab
@@ -182,26 +163,23 @@ setup command and enabling these checks afterwards again.
 >
 > ~~~
 > cmssw_setup:
->    image: registry.cern.ch/docker.io/cmssw/el7:x86_64
+>   image: registry.cern.ch/docker.io/cmssw/el7:x86_64
 >   tags:
 >     - cvmfs
 >   variables:
 >     # This is also set on LXPLUS
 >     CMS_PATH: /cvmfs/cms.cern.ch
 >   script:
->     # IMPORTANT: Expand aliases in noninteractive bash mode
->     # Otherwise cmsrel and cmsenv won't work
->     - shopt -s expand_aliases
->     # access CVMFS
 >     - set +u && source ${CMS_PATH}/cmsset_default.sh; set -u
->     - cmsrel CMSSW_10_6_8_patch1
->     - cd CMSSW_10_6_8_patch1/src
+>     - export  SCRAM_ARCH=slc7_amd64_gcc700
+>     - cmsrel CMSSW_10_6_30
+>     - cd CMSSW_10_6_30/src
 >     - cmsenv
 >     - cmsRun --help
 > ~~~
 > {: .language-yaml}
 >
-> The `image` directive tells the gitlab runner that it should run in a CentOS7 container, just like you would manually do on lxplus using `cmssw-el7`.
+> The `image` directive tells the gitlab runner that it should run in a CentOS7 container, just like you would manually do on LXPLUS issuing `cmssw-el7`.
 > The `set +u` command turns off errors for referencing unset variables. It isn't really needed here, since `-u` (i.e. not allowing to use unset variables) isn't set by default, but the script would fail if one used `set -u` somewhere else, so it's safer to catch this here.
 {: .solution}
 
