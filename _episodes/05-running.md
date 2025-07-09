@@ -254,8 +254,10 @@ script:
 In the solutions above you will notice that we have used the `needs` keyword in the yaml file to introduce dependencies between jobs.
 The use of `needs` is described in the [GitLab documentation on `need`][gitlab-need].
 Another possibility to introduce job dependencies is using the `dependencies` keyword, as described in the [GitLab documentation on `dependencies`][gitlab-dependencies].
-The crucial difference between the two approaches is that using `need` the dependent job will start as soon as the needed condition is met, regardless of the stages configuration.
-The `dependencies` instead, can only be imposed between jobs in different stages, so the dependent job will start only when all the jobs in the stage it depends on are completed.
+The crucial difference between the two approaches is that when using `need`,
+the dependent job will start as soon as the needed condition is met, regardless of the stages configuration.
+The `dependencies` instead, can only be imposed between jobs in different stages,
+so the dependent job will start only when all the jobs in the stage it depends on are completed.
 
 > ## Bonus: Store the output ROOT file as artifact
 >
@@ -266,7 +268,3 @@ The `dependencies` instead, can only be imposed between jobs in different stages
 {: .testimonial}
 
 {% include links.md %}
-
-[gitlab-private-runner]: https://gitlab.docs.cern.ch/docs/Build%20your%20application/CI-CD/Runners/private-runner-registration/
-[gitlab-need]: https://docs.gitlab.com/ci/yaml/needs/
-[gitlab-dependencies]: https://docs.gitlab.com/ci/yaml/#dependencies

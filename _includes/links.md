@@ -62,3 +62,6 @@
 [hsf-training-gitlab-ci]: https://hsf-training.github.io/hsf-training-cicd/
 [cms-analysis]: https://gitlab.cern.ch/cms-analysis
 [cat-docs]: https://cms-analysis.docs.cern.ch/code/
+[gitlab-private-runner]: https://gitlab.docs.cern.ch/docs/Build%20your%20application/CI-CD/Runners/private-runner-registration/
+[gitlab-need]: https://docs.gitlab.com/ci/yaml/needs/
+[gitlab-dependencies]: https://docs.gitlab.com/ci/yaml/#dependencies
