@@ -29,11 +29,12 @@ to be stored in GitLab.
 > history. Furthermore, putting them in a public, or even a private but shared
 > repository, is a violation of grid policy, and could lead to access being
 > revoked for the offending user. Should you accidentally have put sensitive
-> data to a repository, please see the [guide by GitHub][removing-sensitive] to
+> data to a repository, please see the guides by [GitHub][removing-sensitive-github]
+> and [GitLab][removing-sensitive-gitlab] to
 > remove them (though the data should still be considered compromised).
 {: .callout}
 
-Please make sure to revisit the section on
+For more information see the section on
 [private information/access control][lesson-gitlab-secrets]
 from the
 [Continuous Integration / Continuous Development (CI/CD)][lesson-gitlab]
@@ -141,7 +142,7 @@ and certificates as variables to GitLab:
 - As an additional safety measure, set them as `Masked` as well if possible (this will not work for the certificates but should for your grid password).
 
 For more details, see the
-[Variables: Advanced use section][gitlab-variables-advanced]
+[GitLab CI/CD variables][gitlab-variables-advanced]
 of the GitLab documentation. Setting variables to `Protected` means that
 they are only available in protected branches, e.g. your `master` branch.
 This is important when collaborating with others, since anyone with access
@@ -166,12 +167,14 @@ printf 'mySecr3tP4$$w0rd' | base64
 {: .language-bash}
 
 Mind the single quotes (`'`) and not double quotes (`"`). If you are on Linux,
-you should `-w 0` to the `base64` command.
+you should add `-w 0` to the `base64` command, as by default the encoded string
+is wrapped after 76 characters. 
+The option `-w 0` disables wrapping.
 For the two certificates, use them as input to `base64` directly:
 
 ~~~
-base64 -i ~/.globus/usercert.pem
-base64 -i cat ~/.globus/userkey.pem
+base64 -i ~/.globus/usercert.pem -w 0
+base64 -i ~/.globus/userkey.pem -w 0
 ~~~
 {: .language-bash}
 
@@ -187,7 +190,7 @@ The `Settings` --> `CI / CD` --> `Variables` section should look like this:
 
 > ## Better safe than sorry
 > To reduce the risk of leaking your passwords and certificates to others, you should
-> **protect** your master branch, effectively preventing you and others from pushing to
+> **protect** your master branch, effectively preventing others from pushing to
 > it directly and e.g. print your password to the job logs.
 > To do so, go to *Settings* -> *Repository* -> *Protected Branches*. Mind that the
 > option chosen below still puts a lot of trust in your collaborators. With the
@@ -216,13 +219,12 @@ printf "${GRID_PASSWORD}" | base64 -d | voms-proxy-init --voms cms --pwstdin
 Trying this with the standard GitLab CC7 runner will fail, since the
 CMS-specific certificates are not included in the image. An image that
 has these certificates installed already is
-`gitlab-registry.cern.ch/clange/cmssw-docker/cc7-cms:latest`.
+`gitlab-registry.cern.ch/cms-cloud/cmssw-docker/cc7-cms:latest`.
 An example to obtain a grid proxy, check it, and then destroy it again
 would result in the following `yaml`:
 
 ~~~
 voms_proxy_test:
-  stage: test
   image:
     name: gitlab-registry.cern.ch/cms-cloud/cmssw-docker/cc7-cms:latest
     entrypoint: [""]
@@ -249,4 +251,5 @@ command.
 
 {% include links.md %}
 
-[removing-sensitive]: https://help.github.com/en/github/authenticating-to-github/removing-sensitive-data-from-a-repository
+[removing-sensitive-github]: https://help.github.com/en/github/authenticating-to-github/removing-sensitive-data-from-a-repository
+[removing-sensitive-gitlab]: https://docs.gitlab.com/topics/git/undo/#handle-sensitive-information

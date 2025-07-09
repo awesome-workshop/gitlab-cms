@@ -54,9 +54,9 @@
 [payload-gitlab-cms]: https://gitlab.cern.ch/awesome-workshop/payload-gitlab-cms
 [gitlab-artifacts]: https://docs.gitlab.com/ee/ci/yaml/#artifacts
 [lesson-gitlab-artifacts]: https://awesome-workshop.github.io/continuous-integration-deployment-gitlab/12-skim-milk/index.html
-[lesson-gitlab-secrets]: https://awesome-workshop.github.io/continuous-integration-deployment-gitlab/12-the-spy-game/index.html
-[lesson-gitlab]: https://awesome-workshop.github.io/continuous-integration-deployment-gitlab/
-[gitlab-variables-advanced]: https://gitlab.cern.ch/help/ci/variables/README#advanced-use
+[lesson-gitlab-secrets]: https://hsf-training.github.io/hsf-training-cicd/12-the-spy-game/index.html
+[lesson-gitlab]: https://hsf-training.github.io/hsf-training-cicd/
+[gitlab-variables-advanced]: https://docs.gitlab.com/ci/variables/
 [workshop-indico]: https://indico.cern.ch/event/854880/
 [gitlab-newproject]: https://gitlab.cern.ch/projects/new
 [hsf-training-gitlab-ci]: https://hsf-training.github.io/hsf-training-cicd/
