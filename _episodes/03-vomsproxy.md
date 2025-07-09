@@ -29,8 +29,8 @@ to be stored in GitLab.
 > history. Furthermore, putting them in a public, or even a private but shared
 > repository, is a violation of grid policy, and could lead to access being
 > revoked for the offending user. Should you accidentally have put sensitive
-> data to a repository, please see the guides [by GitHub][removing-sensitive-github]
-> and [by GitLab][removing-sensitive-gitlab] to
+> data to a repository, please see the guides by [GitHub][removing-sensitive-github]
+> and [GitLab][removing-sensitive-gitlab] to
 > remove them (though the data should still be considered compromised).
 {: .callout}
 
@@ -168,7 +168,8 @@ printf 'mySecr3tP4$$w0rd' | base64
 
 Mind the single quotes (`'`) and not double quotes (`"`). If you are on Linux,
 you should add `-w 0` to the `base64` command, as by default the encoded string
-is wrapped after 76 characters - `-w 0` means wrapping is disabled.
+is wrapped after 76 characters. 
+The option `-w 0` disables wrapping.
 For the two certificates, use them as input to `base64` directly:
 
 ~~~
