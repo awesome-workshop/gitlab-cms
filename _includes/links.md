@@ -53,7 +53,7 @@
 [gitlab-ci]: https://docs.gitlab.com/ci/
 [payload-gitlab-cms]: https://gitlab.cern.ch/awesome-workshop/payload-gitlab-cms
 [gitlab-artifacts]: https://docs.gitlab.com/ee/ci/yaml/#artifacts
-[lesson-gitlab-artifacts]: https://awesome-workshop.github.io/continuous-integration-deployment-gitlab/12-skim-milk/index.html
+[lesson-gitlab-artifacts]: https://hsf-training.github.io/hsf-training-cicd/11-skim-milk/index.html#artifacts
 [lesson-gitlab-secrets]: https://hsf-training.github.io/hsf-training-cicd/12-the-spy-game/index.html
 [lesson-gitlab]: https://hsf-training.github.io/hsf-training-cicd/
 [gitlab-variables-advanced]: https://docs.gitlab.com/ci/variables/
@@ -62,3 +62,6 @@
 [hsf-training-gitlab-ci]: https://hsf-training.github.io/hsf-training-cicd/
 [cms-analysis]: https://gitlab.cern.ch/cms-analysis
 [cat-docs]: https://cms-analysis.docs.cern.ch/code/
+[gitlab-private-runner]: https://gitlab.docs.cern.ch/docs/Build%20your%20application/CI-CD/Runners/private-runner-registration/
+[gitlab-need]: https://docs.gitlab.com/ci/yaml/needs/
+[gitlab-dependencies]: https://docs.gitlab.com/ci/yaml/#dependencies

@@ -24,10 +24,10 @@ code yields the expected results.
 > ## Fair use
 > Please remember that the provided runners are shared among all users, so
 > please avoid massive pipelines and CI stages with more than 5 jobs in
-> parallel or that run with a parallel configuration higher than 5.
+> parallel or that run with a parallel configuration within a job higher than 5.
 >
 > If you need to run these pipelines please deploy your own private runners
-> to avoid affecting the rest of the users.
+> to avoid affecting the rest of the users. Check the [Private GitLab Runners registration guide][gitlab-private-runner].
 {: .callout}
 
 ## Requirements for running CMSSW
@@ -45,17 +45,15 @@ For the analysis example provided in this lessons, we'll use a single file
 from the [/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIISummer20UL17MiniAODv2-106X_mc2017_realistic_v9-v2/MINIAODSIM](https://cmsweb.cern.ch/das/request?input=dataset%3D%2FDYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8%2FRunIISummer20UL17MiniAODv2-106X_mc2017_realistic_v9-v2%2FMINIAODSIM&instance=prod/global) data set.
 A copy of one file of this dataset is permanently stored on EOS in the following path: `/eos/cms/store/group/cat/datasets/MINIAODSIM/RunIISummer20UL17MiniAODv2-106X_mc2017_realistic_v9-v2/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/2C5565D7-ADE5-2C40-A0E5-BDFCCF40640E.root`.
 
-## Executing `cmsRun`
+## Ingredients for executing `cmsRun`
 
 In principle, all we need to do is compile the code as demonstrated in
-[episode 2]({{ page.root }}{% link _episodes/02-compiling.md %}),
+[Compiling a CMSSW package]({{ page.root }}{% link _episodes/02-compiling.md %}),
 adding the grid proxy as just done in
-[episode 3]({{ page.root }}{% link _episodes/03-vomsproxy.md %}) or, preferably, in [episode 4]({{ page.root }}{% link _episodes/04-catservices.md %})
+[Obtaining a grid proxy]({{ page.root }}{% link _episodes/03-vomsproxy.md %}) or, preferably, in [CAT services for GitLab CI]({{ page.root }}{% link _episodes/04-catservices.md %})
 and then execute the `cmsRun` command.
-Mind that you do not need the
-`git cms-addpkg PhysicsTools/PatExamples` command here anymore,
-i.e. remove it in the following! Putting this together, the
-additional commands to run would be:
+Mind that, if you tried out the example for adding CMSSW packages in the previous section, you can remove that job (`cmssw_addpkg`) from the `.gitlab-ci.yml` file, it is not needed!
+Putting this together, the additional commands to run would be:
 
 ~~~
 cd ${CMSSW_BASE}/src/AnalysisCode/ZPeakAnalysis/
@@ -85,7 +83,7 @@ You can find more detailed information in the
 {: .callout}
 
 For the compiled code to be available in the subsequent steps, the directories
-that should be provided need to be listed explicitely. The `yaml` code from
+that should be provided need to be listed explicitly. The `yaml` code from
 the compilation step in
 [episode 2]({{ page.root }}{% link _episodes/02-compiling.md %})
 needs to be extended as follows:
@@ -100,8 +98,10 @@ artifacts:
 ~~~
 {: .language-yaml}
 
+The `expire_in` is used to specify how long artifacts are to be kept before they are marked for deletion.
+
 As path we use `${CMSSW_RELEASE}`, i.e. the full CMSSW area. Since this area
-is write protected, we need to copy the whole area to a new directory and
+is write protected, in the subsequent steps we need to copy the whole area to a new directory and
 recursively add write permissions again. In the following, this new workarea
 will have to be used:
 
@@ -139,12 +139,13 @@ script:
   variables:
     CMS_PATH: /cvmfs/cms.cern.ch
     EOS_MGM_URL: "root://eoscms.cern.ch"
-    CMSSW_RELEASE: CMSSW_10_6_8_patch1
+    CMSSW_RELEASE: CMSSW_10_6_30
+    SCRAM_ARCH=slc7_amd64_gcc700
   tags:
     - cvmfs
   script:
-    - shopt -s expand_aliases
     - set +u && source ${CMS_PATH}/cmsset_default.sh; set -u
+    - export SCRAM_ARCH=${SCRAM_ARCH}
     - mkdir run
     - cp -r ${CMSSW_RELEASE} run/
     - chmod -R +w run/${CMSSW_RELEASE}/
@@ -185,12 +186,13 @@ script:
     EOS_MGM_URL: root://eoscms.cern.ch
     CMS_PATH: /cvmfs/cms.cern.ch
     EOS_MGM_URL: "root://eoscms.cern.ch"
-    CMSSW_RELEASE: CMSSW_10_6_8_patch1
+    CMSSW_RELEASE: CMSSW_10_6_30
+    SCRAM_ARCH=slc7_amd64_gcc700
   before_script:
   - 'XrdSecsssENDORSEMENT=$(curl -H "Authorization: ${MY_JOB_JWT}" "https://cms-cat-ci-datasets.app.cern.ch/api?eospath=${EOSPATH}" | tr -d \")'
   script:
-    - shopt -s expand_aliases
     - set +u && source ${CMS_PATH}/cmsset_default.sh; set -u
+    - export SCRAM_ARCH=${SCRAM_ARCH}
     - mkdir run
     - cp -r ${CMSSW_RELEASE} run/
     - chmod -R +w run/${CMSSW_RELEASE}/
@@ -209,7 +211,6 @@ script:
 >
 > ~~~
 > cmssw_run_proxyservice:
-  stage: run
   needs:
     - job: cmssw_compile
       artifacts: true
@@ -227,12 +228,13 @@ script:
     EOS_MGM_URL: root://eoscms.cern.ch
     CMS_PATH: /cvmfs/cms.cern.ch
     EOS_MGM_URL: "root://eoscms.cern.ch"
-    CMSSW_RELEASE: CMSSW_10_6_8_patch1   
+    CMSSW_RELEASE: CMSSW_10_6_30
+    SCRAM_ARCH=slc7_amd64_gcc700
   before_script:
     - 'proxy=$(curl -H "Authorization: ${MY_JOB_JWT}" "https://cms-cat-grid-proxy-service.app.cern.ch/api" | tr -d \")'
   script:
-    - shopt -s expand_aliases
     - set +u && source ${CMS_PATH}/cmsset_default.sh; set -u
+    - export SCRAM_ARCH=${SCRAM_ARCH}
     - printf $proxy | base64 -d > myproxy
     - export X509_USER_PROXY=$(pwd)/myproxy
     - export X509_CERT_DIR=/cvmfs/grid.cern.ch/etc/grid-security/certificates/
@@ -248,6 +250,14 @@ script:
 > ~~~
 > {: .language-yaml}
 {: .solution}
+
+In the solutions above you will notice that we have used the `needs` keyword in the yaml file to introduce dependencies between jobs.
+The use of `needs` is described in the [GitLab documentation on `need`][gitlab-need].
+Another possibility to introduce job dependencies is using the `dependencies` keyword, as described in the [GitLab documentation on `dependencies`][gitlab-dependencies].
+The crucial difference between the two approaches is that when using `need`,
+the dependent job will start as soon as the needed condition is met, regardless of the stages configuration.
+The `dependencies` instead, can only be imposed between jobs in different stages,
+so the dependent job will start only when all the jobs in the stage it depends on are completed.
 
 > ## Bonus: Store the output ROOT file as artifact
 >
