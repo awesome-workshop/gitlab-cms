@@ -37,15 +37,17 @@ username in case it isn't the same as on your laptop):
 mkdir -p ~/awesome-workshop
 cd awesome-workshop
 git clone ssh://git@gitlab.cern.ch:7999/${USER}/awesome-gitlab-cms.git
-cd  awesome-gitlab-cms
+cd awesome-gitlab-cms
 ~~~
 {: .language-bash}
 
 ## Choosing the correct GitLab runner
 
 We are now going to setup a GitLab CI. For that, we need to create a `.gitlab-ci.yml` file.
-Standard GitLab CI runners at CERN do not mount CVMFS, which is required in many cases, for example for setting up CMSSW, or to create a grid proxy, or to access LCG software stacks in `/cvmfs/sft.cern.ch/`. In order to get a runner that mounts CVMFS, all you need
-to do is add a `tag` to your `gitlab-ci.yml` file:
+Standard [GitLab CI runners at CERN](https://gitlab.docs.cern.ch/docs/Build%20your%20application/CI-CD/Runners/)
+do not mount CVMFS, which is required in many cases, for example for setting up CMSSW, to create a grid proxy, or to access LCG software stacks in `/cvmfs/sft.cern.ch/`.
+In order to get a runner that mounts CVMFS, you need
+to add a `tag` to your `gitlab-ci.yml` file:
 
 ~~~
 tags:
@@ -67,7 +69,7 @@ cmssw_setup:
 The `cmssw_setup` line defines the name of the job, and all the job does is
 list `/cvmfs/cms.cern.ch/`, which would fail if CVMFS isn't mounted. 
 
-To trigger the pipeline we just need to commit the file.
+To trigger the pipeline we need to commit the file and push it to GitLab:
 
 ~~~
 git add .gitlab-ci.yml
