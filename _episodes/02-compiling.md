@@ -93,9 +93,9 @@ cmssw_compile:
 > already contains files.
 {: .callout}
 
-When developing CMSSW code, you will sometimes find in the situation where you need
+When developing CMSSW code, you will sometimes find yourself in the situation where you need
 to rebuild one of the CMSSW packages. 
-This need can arise either from the fact you are developing a modification to such package, 
+This need can arise either from the fact you are modifying this package, 
 or from the fact that another CMSSW package depends on the one you are developing
 and thus needs to be rebuilt.
 
