@@ -12,6 +12,17 @@ keypoints:
 
 ## Build a container image
 
+Using container images locally is explained in the [CMS Docker lesson](https://awesome-workshop.github.io/docker-cms/). 
+In this lesson, we have used many of them already.
+We will now see to build a container image including files from your repository in a GitLab CI/CD pipeline.
+
+Here, we expect that you have a `Dockerfile` in your repository. This file defines what "base" image of your new image and what files goes in it.
+See the [HSF Docker tutorial](https://hsf-training.github.io/hsf-training-docker/index.html) to learn more about containers.
+
+For the build you can use an existing `yml` template and extend it in your pipeline. You can do this with `include:` in your `.gitlab-ci.yml`.
+
+You will add a job that extends this template with the variable you need:
+
 ~~~
 stages:
 [...]
