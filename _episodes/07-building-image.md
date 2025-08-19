@@ -21,7 +21,7 @@ See the [HSF Docker tutorial](https://hsf-training.github.io/hsf-training-docker
 
 For the build you can use an existing `yml` template and extend it in your pipeline. You can do this with `include:` in your `.gitlab-ci.yml`.
 
-You will add a job that extends this template with the variable you need:
+You will add a job that extends this template with the variables you need:
 
 ~~~
 stages:
@@ -47,5 +47,10 @@ build_container_image:
 {: .language-yaml}
 
 The variables starting with `CI_` are predefined variables for the GitLab CI/CD pipelines, you can find them in the [GitLab CI/CD documentation](https://docs.gitlab.com/ci/variables/predefined_variables/). Here, they are used to get a one-to-one correspondance between the image and the code.
+
+Once the pipeline completes, you will find the container image in the container registry of your repository which you can find in  **Deploy -> Container registry**.
+
+In this manner, you can build a container image even without having docker-engine installed locally.
+If your repository is public, anyone can use this image.
 
 {% include links.md %}
