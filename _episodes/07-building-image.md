@@ -25,48 +25,13 @@ You will add a job that extends this template with the variables you need:
 
 ~~~
 stages:
-[...]
-
-
-include:
-  - project: 'cms-analysis/general/container-image-ci-templates'
-    file:
-      - 'kaniko-image.gitlab-ci.yml'
-
-
-[...]
-
-build_container_image:
-  extends: .build_kaniko
-  variables:
-    DOCKER_FILE_NAME: "Dockerfile"
-    PUSH_IMAGE: "true"
-    REGISTRY_IMAGE_PATH: "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}"
-
-~~~
-{: .language-yaml}
-
-The variables starting with `CI_` are predefined variables for the GitLab CI/CD pipelines, you can find them in the [GitLab CI/CD documentation](https://docs.gitlab.com/ci/variables/predefined_variables/). Here, they are used to get a one-to-one correspondance between the image and the code.
-
-Once the pipeline completes, you will find the container image in the container registry of your repository which you can find in  **Deploy -> Container registry**.
-
-In this manner, you can build a container image even without having docker-engine installed locally.
-If your repository is public, anyone can use this image.
-
-With snippet above, your container images always have a tag that corresponds to the commit has of your code.
-If you want to have an image with the `latest` tag, you can use a tool called [Skopeo](https://www.redhat.com/en/topics/containers/what-is-skopeo) which is provided through a template `skopeo.gitlab-ci.yml` (add it to `include:`) and do the tagging in another stage in your pipeline:
-
-~~~
-stages:
   - build
   - test_code
-  - tag
 
 include:
   - project: 'cms-analysis/general/container-image-ci-templates'
     file:
       - 'kaniko-image.gitlab-ci.yml'
-      - "skopeo.gitlab-ci.yml"
 
 build_image:
   extends: .build_kaniko
@@ -79,10 +44,32 @@ code_testing:
   stage: test_code
   script:
     - echo "I'm testing the code"
+~~~
+{: .language-yaml}
 
-tag_image:
-  extends: .tag_skopeo
-  stage: tag
+The variables starting with `CI_` are predefined variables for the GitLab CI/CD pipelines, you can find them in the [GitLab CI/CD documentation](https://docs.gitlab.com/ci/variables/predefined_variables/). Here, they are used to get a one-to-one correspondance between the image and the code.
+
+Once the pipeline completes, you will find the container image in the container registry of your repository which you can find in  **Deploy -> Container registry**.
+
+In this manner, you can build a container image even without having docker-engine installed locally.
+If your repository is public, anyone can use this image.
+
+With snippet above, your container images always have a tag that corresponds to the commit has of your code.
+If you want to have an image with the `latest` tag, you can add another tag by defining it in a variable called `EXTRA_TAGS`
+in the build_image step:
+
+~~~
+[...]
+
+build_image:
+  extends: .build_kaniko
+  stage: build
+  variables:
+    PUSH_IMAGE: "true"
+    REGISTRY_IMAGE_PATH: "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}"
+    EXTRA_TAGS: "latest"
+
+[...]
 ~~~
 {: .language-yaml}
 
