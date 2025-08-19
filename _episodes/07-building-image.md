@@ -13,6 +13,16 @@ keypoints:
 ## Build a container image
 
 ~~~
+stages:
+[...]
+
+include:
+  - project: 'ci-tools/container-image-ci-templates'
+    file:
+      - 'kaniko-image.gitlab-ci.yml'
+
+[...]
+
 build_image:
   stage: build
   extends: .build_kaniko
