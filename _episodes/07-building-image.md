@@ -16,26 +16,21 @@ keypoints:
 stages:
 [...]
 
+
 include:
-  - project: 'ci-tools/container-image-ci-templates'
+  - project: 'cms-analysis/general/container-image-ci-templates'
     file:
       - 'kaniko-image.gitlab-ci.yml'
 
+
 [...]
 
-build_image:
-  stage: build
+build_container_image:
   extends: .build_kaniko
   variables:
     DOCKER_FILE_NAME: "Dockerfile"
     PUSH_IMAGE: "true"
     REGISTRY_IMAGE_PATH: "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}"
-  script:
-    - /kaniko/executor
-      --context "${CI_PROJECT_DIR}"
-      --dockerfile "${CI_PROJECT_DIR}/${DOCKER_FILE_NAME}"
-      --destination "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}"
-      --destination "${CI_REGISTRY_IMAGE}:latest"
 
 ~~~
 {: .language-yaml}
