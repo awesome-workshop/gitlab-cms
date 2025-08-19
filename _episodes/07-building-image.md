@@ -54,7 +54,36 @@ In this manner, you can build a container image even without having docker-engin
 If your repository is public, anyone can use this image.
 
 With snippet above, your container images always have a tag that corresponds to the commit has of your code.
-If you want to have an image with the `latest` tag, modify your jos as follows:
+If you want to have an image with the `latest` tag, you can use another tool (add it to `include:`) and add another stage in your pipeline:
 
+~~~
+stages:
+  - build
+  - test_code
+  - tag
+
+include:
+  - project: 'cms-analysis/general/container-image-ci-templates'
+    file:
+      - 'kaniko-image.gitlab-ci.yml'
+      - "skopeo.gitlab-ci.yml"
+
+build_image:
+  extends: .build_kaniko
+  stage: build
+  variables:
+    PUSH_IMAGE: "true"
+    REGISTRY_IMAGE_PATH: "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}"
+
+code_testing:
+  stage: test_code
+  script:
+    - echo "I'm testing the code"
+
+tag_image:
+  extends: .tag_skopeo
+  stage: tag
+~~~
+{: .language-yaml}
 
 {% include links.md %}
