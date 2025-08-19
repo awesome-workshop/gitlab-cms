@@ -46,4 +46,6 @@ build_container_image:
 ~~~
 {: .language-yaml}
 
+The variables starting with `CI_` are predefined variables for the GitLab CI/CD pipelines, you can find them in the [GitLab CI/CD documentation](https://docs.gitlab.com/ci/variables/predefined_variables/). Here, they are used to get a one-to-one correspondance between the image and the code.
+
 {% include links.md %}
