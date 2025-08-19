@@ -86,4 +86,22 @@ tag_image:
 ~~~
 {: .language-yaml}
 
+You can use this image in GitLab pipelines (or in other workflows):
+
+~~~
+  image:
+    name: gitlab-registry.cern.ch/<your username>/><your repository>:latest
+~~~
+{: .language-yaml}
+
+or even use it e.g. on `lxplus`:
+
+~~~
+apptainer shell docker://gitlab-registry.cern.ch/<your username>/><your repository>:latest
+~~~
+{: .language-bash}
+
+For specific code versions, you can the commit hash as the tag, instead of `:latest`. 
+
+
 {% include links.md %}
