@@ -54,7 +54,7 @@ In this manner, you can build a container image even without having docker-engin
 If your repository is public, anyone can use this image.
 
 With snippet above, your container images always have a tag that corresponds to the commit has of your code.
-If you want to have an image with the `latest` tag, you can use another tool (add it to `include:`) and add another stage in your pipeline:
+If you want to have an image with the `latest` tag, you can use a tool called [Skopeo](https://www.redhat.com/en/topics/containers/what-is-skopeo) which is provided through a template `skopeo.gitlab-ci.yml` (add it to `include:`) and do the tagging in another stage in your pipeline:
 
 ~~~
 stages:
