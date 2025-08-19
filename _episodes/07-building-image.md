@@ -53,4 +53,8 @@ Once the pipeline completes, you will find the container image in the container 
 In this manner, you can build a container image even without having docker-engine installed locally.
 If your repository is public, anyone can use this image.
 
+With snippet above, your container images always have a tag that corresponds to the commit has of your code.
+If you want to have an image with the `latest` tag, modify your jos as follows:
+
+
 {% include links.md %}
