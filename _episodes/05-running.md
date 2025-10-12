@@ -187,7 +187,7 @@ script:
     CMS_PATH: /cvmfs/cms.cern.ch
     EOS_MGM_URL: "root://eoscms.cern.ch"
     CMSSW_RELEASE: CMSSW_10_6_30
-    SCRAM_ARCH=slc7_amd64_gcc700
+    SCRAM_ARCH: slc7_amd64_gcc700
   before_script:
   - 'XrdSecsssENDORSEMENT=$(curl -H "Authorization: ${MY_JOB_JWT}" "https://cms-cat-ci-datasets.app.cern.ch/api?eospath=${EOSPATH}" | tr -d \")'
   script:
@@ -229,7 +229,7 @@ script:
     CMS_PATH: /cvmfs/cms.cern.ch
     EOS_MGM_URL: "root://eoscms.cern.ch"
     CMSSW_RELEASE: CMSSW_10_6_30
-    SCRAM_ARCH=slc7_amd64_gcc700
+    SCRAM_ARCH: slc7_amd64_gcc700
   before_script:
     - 'proxy=$(curl -H "Authorization: ${MY_JOB_JWT}" "https://cms-cat-grid-proxy-service.app.cern.ch/api" | tr -d \")'
   script:
