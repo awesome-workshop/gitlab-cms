@@ -140,7 +140,7 @@ script:
     CMS_PATH: /cvmfs/cms.cern.ch
     EOS_MGM_URL: "root://eoscms.cern.ch"
     CMSSW_RELEASE: CMSSW_10_6_30
-    SCRAM_ARCH=slc7_amd64_gcc700
+    SCRAM_ARCH: slc7_amd64_gcc700
   tags:
     - cvmfs
   script:
