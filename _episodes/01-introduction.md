@@ -1,13 +1,13 @@
 ---
-title: "Setting up an environment using CVMFS in GitLab CI (e.g. to run CMSSW)"
+title: "Setting up CMSSW in GitLab CI with CernVM File System (CVMFS)"
 teaching: 10
 exercises: 10
 questions:
 - "Which GitLab runners are needed?"
 - "What's different w.r.t. LXPLUS?"
 objectives:
-- "Know how to source the CMSSW environment"
-- "Understand the different commands that need to be used"
+- "Know how to source the CMSSW environment."
+- "Understand the different commands that need to be used."
 keypoints:
 - "Special GitLab CVMFS runners are required to run CI jobs that need CVMFS, e.g. to run CMSSW."
 - "If the setup script tries to access unset variables, then that can cause the CI to fail when using strict shell scripting checks."
@@ -18,19 +18,19 @@ CI/CD and also CERN-specific information:
 - [GitLab CI/CD documentation][gitlab-ci]
 - [CERN Knowledge Base Articles for the Git Service][snow-git]
 
-These pages serve as a good entrypoint in case of problems and questions.
+These pages serve as a good entry point in case of problems and questions.
 
 > ## Create a new GitLab project to follow along
 > Please [create a new GitLab project][gitlab-newproject] now to follow along.
 > To do so, select "Create blank project" and provide a project name.
-> You can for instance call it `awesome-gitlab-cms`. 
+> You can, for instance, call it `awesome-gitlab-cms`. 
 > You need to specify the project visibility level. Private, the default, is fine for this tutorial.
-> In the following, we will assume that all your work is in a directory called `awesome-workshop` in your
-> home directory and we will now clone the newly created project in a local repository therein:
+> In the following, we will assume that all your work is into a directory called `awesome-workshop` in your
+> home directory, and we will now clone the newly created project in a local repository therein:
 > `~/awesome-workshop/awesome-gitlab-cms`
 {: .callout}
 
-The commands would look like this (replace `${USER}` by your CERN
+The commands would look like this (replace `${USER}` with your CERN
 username in case it isn't the same as on your laptop):
 
 ~~~
@@ -43,9 +43,9 @@ cd awesome-gitlab-cms
 
 ## Choosing the correct GitLab runner
 
-We are now going to setup a GitLab CI. For that, we need to create a `.gitlab-ci.yml` file.
+We are now going to set up a GitLab CI. For that, we need to create a `.gitlab-ci.yml` file.
 Standard [GitLab CI runners at CERN](https://gitlab.docs.cern.ch/docs/Build%20your%20application/CI-CD/Runners/)
-do not mount CVMFS, which is required in many cases, for example for setting up CMSSW, to create a grid proxy, or to access LCG software stacks in `/cvmfs/sft.cern.ch/`.
+do not mount CVMFS, which is required in many cases, for example, for setting up CMSSW, to create a grid proxy, or to access LCG software stacks in `/cvmfs/sft.cern.ch/`.
 In order to get a runner that mounts CVMFS, you need
 to add a `tag` to your `gitlab-ci.yml` file:
 
@@ -69,7 +69,7 @@ cmssw_setup:
 The `cmssw_setup` line defines the name of the job, and all the job does is
 list `/cvmfs/cms.cern.ch/`, which would fail if CVMFS isn't mounted. 
 
-To trigger the pipeline we need to commit the file and push it to GitLab:
+To trigger the pipeline, we need to commit the file and push it to GitLab:
 
 ~~~
 git add .gitlab-ci.yml
@@ -78,12 +78,12 @@ git push
 ~~~
 {: .language-bash}
 
-If you now navigate the GitLab UI with your browser you will see the CI running and eventually finishing.
+If you now navigate the GitLab UI with your browser, you will see the CI running and eventually finishing.
 You can check the output, and also the `cvmfs` label:
 
 ![A job with a GitLab CVMFS Runner showing the cvmfs label](../fig/cvmfs_tag.png)
 
-In the following you'll will learn how to setup a GitLab CI job that runs CMSSW.
+In the following, you'll learn how to set up a GitLab CI job that runs CMSSW.
 
 This should be regarded as an example for any CI job requiring access to CVMFS and accessing CMS-restricted files.
 
@@ -108,7 +108,7 @@ cmsenv
 ~~~
 {: .language-bash}
 
-The first command is needed because CMSSW_10_6_30 is pretty old (we chose an old one on purpose!) and it does not have any build for the recent alma9 LXPLUS. 
+The first command is needed because CMSSW_10_6_30 is pretty old (we chose an old one on purpose!), and it does not have any build for the recent alma9 LXPLUS. 
 So we need to start a CentOS7 container first, which we do with the `cmssw-el7` command, as described in the [CMS singularity guide](https://cms-sw.github.io/singularity.html).
 
 Depending on the software version chosen, the third command may print out a warning such as
@@ -150,14 +150,14 @@ of this command is that a few helper functions are defined, such as `cmsrel` and
 
 A common pitfall when setting up CMSSW in GitLab is that the execution
 fails because the setup script doesn't follow best practices for shell
-scripts such as returning non-zero return values even if the setup is OK or
-using unset variables. Even if the script exits without visible error message,
+scripts, such as returning non-zero return values even if the setup is OK or
+using unset variables. Even if the script exits without a visible error message,
 there could be something wrong. It is therefore often a good idea to
 circumvent issues like that by disabling strict checks (issuing `set +u`) before running the
 setup command and enabling these checks afterwards again (issuing `set -u`).
 
 > ## Exercise: Set up CMSSW in GitLab
-> Knowing all this, can you write the `.gitlab-ci.yml` file to set up CMSSW in GitLab starting from the fragment above and check if this is all working by executing `cmsRun --help` at the end?
+> Knowing all this, can you write the `.gitlab-ci.yml` file to set up CMSSW in GitLab, starting from the fragment above, and check if this is all working by executing `cmsRun --help` at the end?
 {: .challenge}
 
 > ## Solution: Set up CMSSW in GitLab
@@ -181,8 +181,8 @@ setup command and enabling these checks afterwards again (issuing `set -u`).
 > ~~~
 > {: .language-yaml}
 >
-> The `image` directive tells the gitlab runner that it should run in a CentOS7 container, just like you would manually do on LXPLUS issuing `cmssw-el7`.
-> The `set +u` command turns off errors for referencing unset variables. It isn't really needed here, since `-u` (i.e. not allowing to use unset variables) isn't set by default, but the script would fail if one used `set -u` somewhere else, so it's safer to catch this here.
+> The `image` directive tells the GitLab runner that it should run in a CentOS7 container, just like you would manually do on LXPLUS issuing `cmssw-el7`.
+> The `set +u` command turns off errors for referencing unset variables. It isn't really needed here, since `-u` (i.e., not allowing to use unset variables) isn't set by default, but the script would fail if one used `set -u` somewhere else, so it's safer to catch this here.
 {: .solution}
 
 The reason why in the example above the variable `${CMS_PATH}` is used and not simply

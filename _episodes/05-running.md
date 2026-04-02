@@ -4,17 +4,17 @@ teaching: 10
 exercises: 10
 questions:
 - "How can I run CMSSW in GitLab CI?"
-- "How can avoid compiling my code for each job?"
+- "How can I avoid compiling my code for each job?"
 objectives:
-- "Successfully run a test job of a simplified Z to leptons analysis"
-- "Use GitLab artifacts to pass compiled analysis code"
+- "Successfully run a test job of a simplified Z to leptons analysis."
+- "Use GitLab artifacts to pass compiled analysis code."
 keypoints:
-- "A special CMSSW image is required to successfully run CMSSW jobs"
-- "Running on CMS data requires a grid proxy, or the files to be stored in the CAT managed area"
-- "Several ways are available to access CMS specific files"
-- "CAT provides services that avoid the danger of leaking credentials"
-- "The use of artifacts allows passing results of one step to the other"
-- "Since artifacts are write-protected, the directory needs to be copied before running CMSSW"
+- "A special CMSSW image is required to successfully run CMSSW jobs."
+- "Running on CMS data requires a grid proxy, or the files to be stored in the CAT managed area."
+- "Several ways are available to access CMS specific files."
+- "CAT provides services that avoid the danger of leaking credentials."
+- "The use of artifacts allows passing results of one step to the other."
+- "Since artifacts are write-protected, the directory needs to be copied before running CMSSW."
 ---
 
 Being able to set up CMSSW and to compile code in GitLab, and knowing how
@@ -26,7 +26,7 @@ code yields the expected results.
 > please avoid massive pipelines and CI stages with more than 5 jobs in
 > parallel or that run with a parallel configuration within a job higher than 5.
 >
-> If you need to run these pipelines please deploy your own private runners
+> If you need to run these pipelines, please deploy your own private runners
 > to avoid affecting the rest of the users. Check the [Private GitLab Runners registration guide][gitlab-private-runner].
 {: .callout}
 
@@ -41,7 +41,7 @@ from the
 [Continuous Integration / Continuous Development (CI/CD)][lesson-gitlab]
 on how to get a Kerberos token via `kinit` (we won't be using this here).
 
-For the analysis example provided in this lessons, we'll use a single file
+For the analysis example provided in this module, we'll use a single file
 from the [/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIISummer20UL17MiniAODv2-106X_mc2017_realistic_v9-v2/MINIAODSIM](https://cmsweb.cern.ch/das/request?input=dataset%3D%2FDYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8%2FRunIISummer20UL17MiniAODv2-106X_mc2017_realistic_v9-v2%2FMINIAODSIM&instance=prod/global) data set.
 A copy of one file of this dataset is permanently stored on EOS in the following path: `/eos/cms/store/group/cat/datasets/MINIAODSIM/RunIISummer20UL17MiniAODv2-106X_mc2017_realistic_v9-v2/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/2C5565D7-ADE5-2C40-A0E5-BDFCCF40640E.root`.
 
@@ -64,7 +64,7 @@ ls -l myZPeak.root
 
 where the last command just checks that an output file has been created.
 However, imagine that you would like to run test jobs on more than one file
-and to speed things up do this in parallel.
+and to speed things up, do this in parallel.
 This would mean that you would
 have to compile the code *N* times, which is a waste of resources and time.
 Instead, we can pass the compiled code from the compile step to the run step
@@ -79,7 +79,7 @@ You can find more detailed information in the
 
 > ## Artifacts are write-protected
 > One important thing to note is that artifacts are write-protected. You
-> cannot write into the artifact directory in any of the following steps.
+> cannot write to the artifact directory in any of the following steps.
 {: .callout}
 
 For the compiled code to be available in the subsequent steps, the directories
@@ -100,9 +100,9 @@ artifacts:
 
 The `expire_in` is used to specify how long artifacts are to be kept before they are marked for deletion.
 
-As path we use `${CMSSW_RELEASE}`, i.e. the full CMSSW area. Since this area
-is write protected, in the subsequent steps we need to copy the whole area to a new directory and
-recursively add write permissions again. In the following, this new workarea
+As path we use `${CMSSW_RELEASE}`, i.e., the full CMSSW area. Since this area
+is write-protected, in the subsequent steps, we need to copy the whole area to a new directory and
+recursively add write permissions again. In the following, this new work area
 will have to be used:
 
 ~~~
@@ -118,8 +118,8 @@ script:
 
 > ## Exercise: Run CMSSW using the artifact from the compile step
 >
-> You should now have all required ingredients to be able to extend the
-> `.gitlab-ci.yml` file such that you can reuse the compiled code in the
+> You should now have all the required ingredients to be able to extend the
+> `.gitlab-ci.yml` file, such that you can reuse the compiled code in the
 > `cmsRun` step.
 >
 {: .challenge}
@@ -251,7 +251,7 @@ script:
 > {: .language-yaml}
 {: .solution}
 
-In the solutions above you will notice that we have used the `needs` keyword in the yaml file to introduce dependencies between jobs.
+In the solutions above, you will notice that we have used the `needs` keyword in the yaml file to introduce dependencies between jobs.
 The use of `needs` is described in the [GitLab documentation on `need`][gitlab-need].
 Another possibility to introduce job dependencies is using the `dependencies` keyword, as described in the [GitLab documentation on `dependencies`][gitlab-dependencies].
 The crucial difference between the two approaches is that when using `need`,
@@ -263,7 +263,7 @@ so the dependent job will start only when all the jobs in the stage it depends o
 >
 > It could be useful to store the output ROOT file as an artifact so that you
 > simply download it after job completion. Do you know how to do it?
-> Hint: you need to provide the full path to it.
+> Hint: You need to provide the full path to it.
 >
 {: .testimonial}
 
