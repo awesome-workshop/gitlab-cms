@@ -6,7 +6,7 @@ This repository generates the corresponding lesson website from [The Carpentries
 > **Note**
 > Click [here](https://oer-particle-physics.github.io/gitlab-cms) for the training website!
 
-The aim of this module is to learn of to run CMS software workflows (CMSSW) in GitLab CI on CERN infrastructure in a reproducible and secure way.
+The aim of this module is to learn how to run CMS software workflows (CMSSW) in a reproducible and secure way using the GitLab installation at CERN.
 
 ## Contributing
 
