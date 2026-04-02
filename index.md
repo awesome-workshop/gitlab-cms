@@ -3,8 +3,8 @@ layout: lesson
 root: .  # Is the only page that doesn't follow the pattern /:path/index.html
 permalink: index.html  # Is the only page that doesn't follow the pattern /:path/index.html
 ---
-In this lesson you will learn how to run jobs that require a CMS-specific software stack and how to access protected files in GitLab CI using the GitLab installation at CERN.
-We will use the use case of running [CMS software (CMSSW)][cmssw] jobs as an example.
+The aim of this module is to learn how to run jobs that require a CMS-specific software stack and how to access protected files in GitLab CI using the GitLab installation at CERN.
+Participants will run [CMS software (CMSSW)][cmssw] jobs as a case study.
 
 <!-- this is an html comment -->
 
