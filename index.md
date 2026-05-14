@@ -16,4 +16,16 @@ Participants will run [CMS software (CMSSW)][cmssw] jobs as a case study.
 > Basic understanding of using and developing in [CMSSW][cmssw].
 {: .prereq}
 
+> ## Learning Objectives
+>
+> After completing this module, participants will be able to:
+>
+> - Set up a GitLab CI environment to run CMS software workflows (CMSSW) on CERN infrastructure. 
+> - Compile and manage CMSSW packages within GitLab CI pipelines. 
+> - Access protected resources by generating and using grid proxies in CI jobs. 
+> - Use CMS authentication services to enable secure CI workflows. 
+> - Run CMSSW jobs for testing in GitLab CI. 
+> - Build container images to create reproducible CMSSW environments in CI/CD pipelines.
+{: .objectives}
+
 {% include links.md %}
