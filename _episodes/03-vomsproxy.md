@@ -5,12 +5,12 @@ exercises: 15
 questions:
 - "How can I obtain a grid proxy in GitLab?"
 objectives:
-- "Securely add grid proxy certificates and passwords to GitLab"
-- "Successfully obtain a grid proxy for the CMS VO"
+- "Securely add grid proxy certificates and passwords to GitLab."
+- "Successfully obtain a grid proxy for the CMS VO."
 keypoints:
-- "Special care is needed when adding secrets in GitLab"
-- "Passwords and certificates should always be set to `Protected` state"
-- "Certificates need to be `base64`-encoded for use as secrets"
+- "Special care is needed when adding secrets in GitLab."
+- "Passwords and certificates should always be set to `Protected` state."
+- "Certificates need to be `base64`-encoded for use as secrets."
 ---
 
 ## Securely adding passwords and files to GitLab
@@ -22,24 +22,24 @@ files, which by default will reside in the `~/.globus` directory, will need
 to be stored in GitLab.
 
 > ## Keep your secrets secret!
-> Please be extra careful when it comes to your account and grid passwords as
+> Please be extra careful when it comes to your account and grid passwords, as
 > well as your certificates! They should never be put in any public place.
 > Putting them under version control is risky, since even if you delete them
 > from the `HEAD` of your `master` branch, they will still be in the commit
-> history. Furthermore, putting them in a public, or even a private but shared
-> repository, is a violation of grid policy, and could lead to access being
+> history. Furthermore, putting them in a public or even a private but shared
+> repository is a violation of grid policy and could lead to access being
 > revoked for the offending user. Should you accidentally have put sensitive
 > data to a repository, please see the guides by [GitHub][removing-sensitive-github]
 > and [GitLab][removing-sensitive-gitlab] to
 > remove them (though the data should still be considered compromised).
 {: .callout}
 
-For more information see the section on
+For more information, see the section on
 [private information/access control][lesson-gitlab-secrets]
 from the
 [Continuous Integration / Continuous Development (CI/CD)][lesson-gitlab]
-on how to add variables in GitLab CI/CD in general. From that lesson you will
-know how to add e.g. your grid proxy password. The grid certificate itself,
+on how to add variables in GitLab CI/CD in general. From that lesson, you will
+know how to add e.g., your grid proxy password. The grid certificate itself,
 however, consists of two files that look like this:
 
 ~~~
@@ -64,7 +64,7 @@ TH1s1SNT4R34lGr1DC3rt1f1C4t3But1Th4s4l3NgtH0F64CH4r4ct3rSP3rL1N3
 ### We need more base: `base64`
 
 Simply pasting them into GitLab does not work since the line breaks will not
-be reflected correctly. There is a trick we can play though: we can encode the
+be reflected correctly. There is a trick we can play, though: we can encode the
 files including line breaks so that they are simply a string, which we can
 decode to yield the same result as the input. The tool of our choice is
 `base64`. Let's give this a go.
@@ -73,7 +73,7 @@ decode to yield the same result as the input. The tool of our choice is
 >
 > Copy the output of the `cat ~/.globus/usercert.pem` output above into a
 > text file called `testcert.txt`, and pipe the content of this file to the
-> `base64` command or use it as input file directly (hint: `base64 --help`).
+> `base64` command or use it as an input file directly (hint: `base64 --help`).
 >
 {: .challenge}
 
@@ -139,12 +139,12 @@ There are a couple of important things to keep in mind when adding passwords
 and certificates as variables to GitLab:
 
 - Variables should always be set to `Protected` state.
-- As an additional safety measure, set them as `Masked` as well if possible (this will not work for the certificates but should for your grid password).
+- As an additional safety measure, set them as `Masked` as well if possible (this will not work for the certificates, but should for your grid password).
 
 For more details, see the
 [GitLab CI/CD variables][gitlab-variables-advanced]
 of the GitLab documentation. Setting variables to `Protected` means that
-they are only available in protected branches, e.g. your `master` branch.
+they are only available in protected branches, e.g., your `master` branch.
 This is important when collaborating with others, since anyone with access
 could just `echo` the variables when making a merge request if you run
 automated tests on merge requests.
@@ -181,7 +181,7 @@ base64 -i ~/.globus/userkey.pem -w 0
 and copy the output into GitLab.
 
 > ## Every equal sign counts!
-> Make sure to copy the full string including the trailing equal signs.
+> Make sure to copy the full string, including the trailing equal signs.
 {: .callout}
 
 The `Settings` --> `CI / CD` --> `Variables` section should look like this:
@@ -242,7 +242,7 @@ voms_proxy_test:
 ~~~
 {: .language-yaml}
 
-You could take this further by e.g. performing a DAS query to keep your input files
+You could take this further, e.g., by performing a DAS query to keep your input files
 up-to-date.
 
 Confirm that this works for you before moving on to the next section!

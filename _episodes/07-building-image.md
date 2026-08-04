@@ -5,9 +5,9 @@ exercises: 10
 questions:
 - "How can I build a container image with my own code in a GitLab CI/CD pipeline?"
 objectives:
-- "Know how to build and store a container image in a GitLab CI/CD pipeline"
+- "Know how to build and store a container image in a GitLab CI/CD pipeline."
 keypoints:
-- "Easy-to-use yml templates exist for container image building"
+- "Easy-to-use yml templates exist for container image building."
 ---
 
 ## Build a container image
@@ -19,7 +19,7 @@ We will now see to build a container image including files from your repository 
 Here, we expect that you have a `Dockerfile` in your repository. This file defines what "base" image of your new image and what files goes in it.
 See the [HSF Docker tutorial](https://hsf-training.github.io/hsf-training-docker/index.html) to learn more about containers.
 
-For the build you can use an existing `yml` template and extend it in your pipeline. You can do this with `include:` in your `.gitlab-ci.yml`.
+For the build, you can use an existing `yml` template and extend it in your pipeline. You can do this with `include:` in your `.gitlab-ci.yml`.
 
 You will add a job that extends this template with the variables you need:
 
@@ -47,14 +47,14 @@ code_testing:
 ~~~
 {: .language-yaml}
 
-The variables starting with `CI_` are predefined variables for the GitLab CI/CD pipelines, you can find them in the [GitLab CI/CD documentation](https://docs.gitlab.com/ci/variables/predefined_variables/). Here, they are used to get a one-to-one correspondance between the image and the code.
+The variables starting with `CI_` are predefined variables for the GitLab CI/CD pipelines, you can find them in the [GitLab CI/CD documentation](https://docs.gitlab.com/ci/variables/predefined_variables/). Here, they are used to get a one-to-one correspondence between the image and the code.
 
-Once the pipeline completes, you will find the container image in the container registry of your repository which you can find in  **Deploy -> Container registry**.
+Once the pipeline completes, you will find the container image in the container registry of your repository, which you can find in  **Deploy -> Container registry**.
 
-In this manner, you can build a container image even without having docker-engine installed locally.
+In this manner, you can build a container image even without having Docker Engine installed locally.
 If your repository is public, anyone can use this image.
 
-With snippet above, your container images always have a tag that corresponds to the commit has of your code.
+With the snippet above, your container images always have a tag that corresponds to the commit hash of your code.
 If you want to have an image with the `latest` tag, you can add another tag by defining it in a variable called `EXTRA_TAGS`
 in the build_image step:
 
@@ -81,14 +81,14 @@ You can use this image in GitLab pipelines (or in other workflows):
 ~~~
 {: .language-yaml}
 
-or even use it e.g. on `lxplus`:
+or even use it, e.g., on `lxplus`:
 
 ~~~
 apptainer shell docker://gitlab-registry.cern.ch/<your username>/><your repository>:latest
 ~~~
 {: .language-bash}
 
-For specific code versions, you can the commit hash as the tag, instead of `:latest`. 
+For specific code versions, you can use the commit hash as the tag, instead of `:latest`. 
 
 
 {% include links.md %}

@@ -6,7 +6,7 @@ questions:
 - "How can I compile my CMSSW package using GitLab CI?"
 - "How do I add other CMSSW packages?"
 objectives:
-- "Successfully compile CMSSW example analysis code in GitLab CI"
+- "Successfully compile CMSSW example analysis code in GitLab CI."
 keypoints:
 - "For code to be compiled in CMSSW, it needs to reside within the work area's `src` directory."
 - "The analysis code from the Git repository is copied to the CMSSW work area in the CI script."
@@ -17,20 +17,20 @@ Now that you know how to get a CMSSW environment, it is time to do something use
 ## Compiling code within the repository
 
 For your analysis to be compiled with CMSSW, it needs to reside in the
-workarea's `src` directory, and in there follow the directory structure of
-two subdirectories (e.g. `AnalysisCode/MyAnalysis`) within which there can be
+workarea's `src` directory, and, within it, follow the directory structure of
+two subdirectories (e.g., `AnalysisCode/MyAnalysis`) in which there can be
 `src`, `interface`, `plugin` and further directories. Your analysis code
 (under version control in GitLab/GitHub) will usually not contain the
 CMSSW workarea. The git repository will either
 contain the analysis code at the lowest level or have a subdirectory 
-for the analysis code, to disentangle it from your configuration files such as the
+for the analysis code, to disentangle it from your configuration files, such as the
 `.gitlab-ci.yml` file.
 
 We will use an example analysis, which selects pairs of electrons and muons.
 [Download the zip file containing the analysis](../files/ZPeakAnalysis.zip)
 and extract it now. The analysis code is
 in a directory called `ZPeakAnalysis` within which `plugins` (the C++ code)
-and `test` (the python config) directories reside.
+and `test` (the Python config) directories reside.
 Add this directory to your repository:
 
 ~~~
@@ -43,7 +43,7 @@ git commit -m "Add ZPeakAnalysis"
 {: .language-bash}
 
 When compiling the code in a GitLab pipeline, the `ZPeakAnalysis` needs
-to be copied into the CMSSW workarea, and it's advisable to use environment
+to be copied into the CMSSW work area, and it's advisable to use environment
 variables for this purpose. This would be achieved like this:
 
 ~~~
@@ -52,7 +52,7 @@ cp -r "${CI_PROJECT_DIR}/ZPeakAnalysis" "${CMSSW_BASE}/src/AnalysisCode/"
 ~~~
 {: .language-bash}
 
-With these two commands we will now be able to extend the `.gitlab-ci.yml`
+With these two commands, we will now be able to extend the `.gitlab-ci.yml`
 file such that we can compile our analysis code in GitLab. To improve the
 readability of the file, the `CMSSW_RELEASE` is defined as a variable:
 
@@ -87,7 +87,7 @@ cmssw_compile:
 
 > ## Always add CMSSW packages before compiling analysis code!
 >
-> Adding CMSSW packages has to happen *before* compiling analysis code in the
+> Adding CMSSW packages has to happen *before* compiling the analysis code in the
 > repository, since `git cms-addpkg` will call `git cms-init` for the
 > `$CMSSW_BASE/src` directory, and `git init` doesn't work if the directory
 > already contains files.
@@ -95,7 +95,7 @@ cmssw_compile:
 
 When developing CMSSW code, you will sometimes find yourself in the situation where you need
 to rebuild one of the CMSSW packages. 
-This need can arise either from the fact you are modifying this package, 
+This need can arise either from the fact that you are modifying this package, 
 or from the fact that another CMSSW package depends on the one you are developing
 and thus needs to be rebuilt.
 
@@ -131,7 +131,7 @@ There are a couple of options to make things work:
 For simplicity, and since we do not need to commit anything back to CMSSW from
 GitLab, we will use the latter approach.
 A complete `yaml` fragment that checks out a CMSSW package after having set up
-CMSSW and then compiles the code looks as follows:
+CMSSW and then compiles the code, which looks as follows:
 
 ~~~
 cmssw_addpkg:
@@ -164,17 +164,17 @@ The additional two variables that are exported here, `CMSSW_MIRROR` and
 `CMSSW_GIT_REFERENCE` can speed up interaction with git, in particular
 faster package checkouts. The `CMSSW_MIRROR` points to a GitHub mirror within the CERN network,
 accessible only from machines within the same network, which is the case for the GitLab runners.
-Settings these variables is *not* mandatory.
+Setting these variables is *not* mandatory.
 
-> ## Bonus: have you tried putting both `cmssw_compile` and `cmssw_addpkg` in the same `.gitlab-ci.yml` file?
+> ## Bonus: Have you tried putting both `cmssw_compile` and `cmssw_addpkg` in the same `.gitlab-ci.yml` file?
 > If you do that, the two jobs will run in parallel.
-> GitLab CI also allows running jobs in stages. Stages define group of jobs running together.
+> GitLab CI also allows running jobs in stages. Stages define a group of jobs running together.
 > To assign a job to a stage, just add `stage: some_name` in its definition.
 > Stages run in sequence according to the order typically defined at the beginning of your `.gitlab-ci.yml`.
 > If any job in a stage fails, the next stage will not run.
 {: .testimonial}
 
-> ## Exercise: can you put `cmssw_compile` and `cmssw_addpkg` in two stages?
+> ## Exercise: Can you put `cmssw_compile` and `cmssw_addpkg` in two stages?
 > 
 {: .challenge}
 
@@ -226,7 +226,7 @@ Settings these variables is *not* mandatory.
 >     - scram b
 > ~~~
 > {: language-yaml}
-> In the solution above you will also notice that we have moved the definition of some variables
+> In the solution above, you will also notice that we have moved the definition of some variables
 > outside of the job definition, because they are used by both jobs.
 {: .solution}
 
