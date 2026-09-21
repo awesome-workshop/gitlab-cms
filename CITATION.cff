@@ -14,6 +14,15 @@ authors:
   - given-names: Laura
     family-names: Marqués
     orcid: https://orcid.org/0000-0002-3593-5557
+  - given-names: Aliya
+    family-names: Nigamova
+    orcid: https://orcid.org/0000-0002-8522-8500
+  - given-names: Piergiulio
+    family-names: Lenzi
+    orcid: https://orcid.org/0000-0002-6927-8807
+  - given-names: Kati
+    family-names: Lassila-Perini
+    orcid: https://orcid.org/0000-0002-5502-1795
 abstract: |-
   The aim of this learning module is to learn how to run CMS software workflows (CMSSW) in a reproducible and secure way using the GitLab installation at CERN.
 
