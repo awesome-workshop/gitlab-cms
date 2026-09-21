@@ -24,7 +24,7 @@ authors:
     family-names: Lassila-Perini
     orcid: https://orcid.org/0000-0002-5502-1795
 abstract: |-
-  The aim of this learning module is to learn how to run CMS software workflows (CMSSW) in a reproducible and secure way using the GitLab installation at CERN.
+  This learning module introduces how to run CMS software workflows (CMSSW) in a reproducible and secure way using the GitLab installation at CERN.
 
   After completing this module, participants will be able to:
   - Set up a GitLab CI environment to run CMS software workflows (CMSSW) on CERN infrastructure.
@@ -44,4 +44,5 @@ keywords:
   - "CMS Authentication"
 repository-code: https://github.com/awesome-workshop/gitlab-cms
 url: https://awesome-workshop.github.io/gitlab-cms/
+doi: 10.5281/zenodo.22879565
 license: CC-BY-4.0
