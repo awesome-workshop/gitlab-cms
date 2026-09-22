@@ -6,7 +6,7 @@ This repository generates the corresponding lesson website from [The Carpentries
 > **Note**
 > Click [here](https://oer-particle-physics.github.io/gitlab-cms) for the training website!
 
-The aim of this module is to learn how to run CMS software workflows (CMSSW) in a reproducible and secure way using the GitLab installation at CERN.
+This learning module introduces how to run CMS software workflows (CMSSW) in a reproducible and secure way using the GitLab installation at CERN.
 
 ## Contributing
 
@@ -43,6 +43,6 @@ This lesson is included in the [ETH Domain Open Educational Resources for Resear
 
 The materials developed here are published under open licenses (CC BY 4.0) and can be freely reused and adapted for teaching and training initiatives worldwide.
 
-See the Zenodo record here (ADD DOI).
+See the Zenodo record [here](https://doi.org/10.5281/zenodo.22879565).
 
 [lesson-example]: https://carpentries.github.io/lesson-example
